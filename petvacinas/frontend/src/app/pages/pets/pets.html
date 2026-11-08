@@ -1,19 +1,19 @@
+
 <div class="pagina">
 
   <div class="cabecalho">
     <div>
       <h1>🐾 Cadastro de Pets</h1>
+
       <button mat-raised-button color="primary" [routerLink]="['/']">
-  ← Voltar ao início
-</button>
+        ← Voltar ao início
+      </button>
+
       <p>Cadastre e gerencie os animais.</p>
     </div>
 
-    <button
-      mat-raised-button
-      color="primary"
-      (click)="mostrarFormulario = !mostrarFormulario"
-    >
+    <button mat-raised-button color="primary"
+      (click)="mostrarFormulario = !mostrarFormulario">
       + Novo pet
     </button>
   </div>
@@ -33,7 +33,7 @@
 
       <mat-form-field appearance="outline">
         <mat-label>Nome do pet</mat-label>
-        <input matInput name="nome" [(ngModel)]="novoPet.nome" required />
+        <input matInput name="nome" [(ngModel)]="novoPet.nome" required>
       </mat-form-field>
 
       <mat-form-field appearance="outline">
@@ -47,23 +47,16 @@
 
       <mat-form-field appearance="outline">
         <mat-label>Raça</mat-label>
-        <input matInput name="raca" [(ngModel)]="novoPet.raca" />
+        <input matInput name="raca" [(ngModel)]="novoPet.raca">
       </mat-form-field>
 
       <mat-form-field appearance="outline">
-        <mat-label>Idade (anos)</mat-label>
-        <input
-          matInput
-          type="number"
-          min="0"
-          name="idade"
-          [(ngModel)]="novoPet.idade"
-        />
-      </mat-form-field>
-
-      <mat-form-field appearance="outline">
-        <mat-label>Nome do tutor</mat-label>
-        <input matInput name="tutor" [(ngModel)]="novoPet.tutor" required />
+        <mat-label>Tutor</mat-label>
+        <mat-select name="tutor" [(ngModel)]="novoPet.tutorId" required>
+          <mat-option *ngFor="let tutor of tutores" [value]="tutor.id">
+            {{ tutor.nome }}
+          </mat-option>
+        </mat-select>
       </mat-form-field>
 
       <div class="botoes">
@@ -86,7 +79,7 @@
 
       <mat-form-field appearance="outline">
         <mat-label>Pesquisar pet ou tutor</mat-label>
-        <input matInput name="pesquisa" [(ngModel)]="pesquisa" />
+        <input matInput name="pesquisa" [(ngModel)]="pesquisa">
       </mat-form-field>
     </div>
 
@@ -97,7 +90,6 @@
             <th>Nome</th>
             <th>Espécie</th>
             <th>Raça</th>
-            <th>Idade</th>
             <th>Tutor</th>
             <th>Ações</th>
           </tr>
@@ -108,22 +100,21 @@
             <td>{{ pet.nome }}</td>
             <td>{{ pet.especie }}</td>
             <td>{{ pet.raca || 'Não informada' }}</td>
-            <td>{{ pet.idade }} anos</td>
-            <td>{{ pet.tutor }}</td>
+            <td>{{ pet.tutor?.nome }}</td>
 
             <td class="acoes">
               <button mat-button color="primary" (click)="editarPet(pet)">
                 Editar
               </button>
 
-              <button mat-button color="warn" (click)="excluirPet(pet.id)">
+              <button mat-button color="warn" (click)="excluirPet(pet.id!)">
                 Excluir
               </button>
             </td>
           </tr>
 
           <tr *ngIf="petsFiltrados.length === 0">
-            <td colspan="6" class="vazio">
+            <td colspan="5" class="vazio">
               Nenhum pet cadastrado.
             </td>
           </tr>

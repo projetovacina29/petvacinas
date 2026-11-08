@@ -7,6 +7,11 @@ export const routes: Routes = [
       import('./pages/home/home').then(m => m.Home)
   },
   {
+    path: 'tutores',
+    loadComponent: () =>
+      import('./pages/tutores/tutores').then(m => m.Tutores)
+  },
+  {
     path: 'pets',
     loadComponent: () =>
       import('./pages/pets/pets').then(m => m.Pets)
@@ -16,16 +21,13 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./pages/vacinas/vacinas').then(m => m.Vacinas)
   },
-
-{
-  path: 'aplicacoes',
-  loadComponent: () =>
-    import('./pages/aplicacoes/aplicacoes').then(m => m.Aplicacoes)
-},
-
+  {
+    path: 'aplicacoes',
+    loadComponent: () =>
+      import('./pages/aplicacoes/aplicacoes').then(m => m.Aplicacoes)
+  },
   {
     path: '**',
     redirectTo: ''
   }
 ];
-import { RouterLink } from '@angular/router';

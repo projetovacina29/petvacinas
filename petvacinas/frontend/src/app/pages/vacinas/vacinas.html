@@ -1,84 +1,44 @@
+
 <div class="pagina">
 
   <div class="cabecalho">
     <div>
-      <h1>💉 Controle de Vacinas</h1>
+      <h1>💉 Cadastro de Vacinas</h1>
+
       <button mat-raised-button color="primary" routerLink="/">
-  ← Voltar ao início
-</button>
-      <p>Gerencie as vacinas e acompanhe a saúde dos seus pets.</p>
+        ← Voltar ao início
+      </button>
+
+      <p>Cadastre e gerencie as vacinas disponíveis.</p>
     </div>
 
-    <button
-      mat-raised-button
-      color="primary"
-      (click)="mostrarFormulario = !mostrarFormulario"
-    >
+    <button mat-raised-button color="primary"
+      (click)="mostrarFormulario = !mostrarFormulario">
       + Nova vacina
     </button>
   </div>
 
   <div class="resumo">
     <mat-card class="resumo-card">
-      <span>Total de vacinas</span>
+      <span>Total de vacinas cadastradas</span>
       <strong>{{ vacinas.length }}</strong>
-    </mat-card>
-
-    <mat-card class="resumo-card">
-      <span>Em dia</span>
-      <strong>{{ totalEmDia }}</strong>
-    </mat-card>
-
-    <mat-card class="resumo-card">
-      <span>Atrasadas</span>
-      <strong>{{ totalAtrasadas }}</strong>
     </mat-card>
   </div>
 
   <mat-card class="formulario" *ngIf="mostrarFormulario">
+
     <h2>{{ editandoId !== null ? 'Editar vacina' : 'Cadastrar vacina' }}</h2>
 
     <form (ngSubmit)="salvarVacina()">
 
       <mat-form-field appearance="outline">
-        <mat-label>Nome do pet</mat-label>
-        <input
-          matInput
-          name="pet"
-          [(ngModel)]="novaVacina.pet"
-          required
-        />
-      </mat-form-field>
-
-      <mat-form-field appearance="outline">
         <mat-label>Nome da vacina</mat-label>
-        <input
-          matInput
-          name="nome"
-          [(ngModel)]="novaVacina.nome"
-          required
-        />
+        <input matInput name="nome" [(ngModel)]="novaVacina.nome" required>
       </mat-form-field>
 
       <mat-form-field appearance="outline">
-        <mat-label>Data da aplicação</mat-label>
-        <input
-          matInput
-          type="date"
-          name="aplicacao"
-          [(ngModel)]="novaVacina.aplicacao"
-          required
-        />
-      </mat-form-field>
-
-      <mat-form-field appearance="outline">
-        <mat-label>Próxima dose</mat-label>
-        <input
-          matInput
-          type="date"
-          name="proximaDose"
-          [(ngModel)]="novaVacina.proximaDose"
-        />
+        <mat-label>Descrição</mat-label>
+        <input matInput name="descricao" [(ngModel)]="novaVacina.descricao" required>
       </mat-form-field>
 
       <div class="botoes">
@@ -100,79 +60,46 @@
       <h2>Vacinas cadastradas</h2>
 
       <mat-form-field appearance="outline">
-        <mat-label>Pesquisar vacina ou pet</mat-label>
-        <input
-          matInput
-          [(ngModel)]="pesquisa"
-          name="pesquisa"
-        />
+        <mat-label>Pesquisar vacina</mat-label>
+        <input matInput name="pesquisa" [(ngModel)]="pesquisa">
       </mat-form-field>
     </div>
 
     <div class="tabela">
-
       <table>
         <thead>
           <tr>
-            <th>Pet</th>
-            <th>Vacina</th>
-            <th>Aplicação</th>
-            <th>Próxima dose</th>
-            <th>Status</th>
+            <th>Nome</th>
+            <th>Descrição</th>
             <th>Ações</th>
           </tr>
         </thead>
 
         <tbody>
           <tr *ngFor="let vacina of vacinasFiltradas">
-            <td>{{ vacina.pet }}</td>
             <td>{{ vacina.nome }}</td>
-            <td>{{ vacina.aplicacao | date:'dd/MM/yyyy' }}</td>
-            <td>
-              {{ vacina.proximaDose ? (vacina.proximaDose | date:'dd/MM/yyyy') : 'Não informada' }}
-            </td>
-
-            <td>
-              <span
-                class="status"
-                [ngClass]="{
-                  'atrasada': statusVacina(vacina) === 'Atrasada',
-                  'emdia': statusVacina(vacina) === 'Em dia',
-                  'hoje': statusVacina(vacina) === 'Vence hoje'
-                }"
-              >
-                {{ statusVacina(vacina) }}
-              </span>
-            </td>
+            <td>{{ vacina.descricao }}</td>
 
             <td class="acoes">
-              <button
-                mat-button
-                color="primary"
-                (click)="editarVacina(vacina)"
-              >
+              <button mat-button color="primary" (click)="editarVacina(vacina)">
                 Editar
               </button>
 
-              <button
-                mat-button
-                color="warn"
-                (click)="excluirVacina(vacina.id)"
-              >
+              <button mat-button color="warn" (click)="excluirVacina(vacina.id!)">
                 Excluir
               </button>
             </td>
           </tr>
 
           <tr *ngIf="vacinasFiltradas.length === 0">
-            <td colspan="6" class="vazio">
+            <td colspan="3" class="vazio">
               Nenhuma vacina cadastrada.
             </td>
           </tr>
         </tbody>
       </table>
-
     </div>
+
   </mat-card>
 
 </div>

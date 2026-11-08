@@ -1,90 +1,128 @@
 
 <div class="pagina">
-  <h1>Aplicações de Vacinas</h1>
-  <button mat-raised-button color="primary" routerLink="/">
-  ← Voltar ao início
-</button>
-  <p>Gerencie as vacinas aplicadas nos seus pets.</p>
 
-  <button mat-raised-button color="primary"
-    (click)="mostrarFormulario = !mostrarFormulario">
-    Nova aplicação
-  </button>
+  <div class="cabecalho">
+    <div>
+      <h1>💉 Aplicações de Vacinas</h1>
 
-  <mat-card *ngIf="mostrarFormulario" class="formulario">
-    <mat-card-header>
-      <mat-card-title>
-        {{ editandoId !== null ? 'Editar aplicação' : 'Cadastrar aplicação' }}
-      </mat-card-title>
-    </mat-card-header>
+      <button mat-raised-button color="primary" routerLink="/">
+        ← Voltar ao início
+      </button>
 
-    <mat-card-content>
-      <form (ngSubmit)="salvarAplicacao()">
+      <p>Registre as vacinas aplicadas nos seus pets.</p>
+    </div>
 
-        <mat-form-field appearance="outline">
-          <mat-label>Nome do pet</mat-label>
-          <input matInput name="pet"
-            [(ngModel)]="novaAplicacao.pet" required>
-        </mat-form-field>
-
-        <mat-form-field appearance="outline">
-          <mat-label>Nome da vacina</mat-label>
-          <input matInput name="vacina"
-            [(ngModel)]="novaAplicacao.vacina" required>
-        </mat-form-field>
-
-        <mat-form-field appearance="outline">
-          <mat-label>Data da aplicação</mat-label>
-          <input matInput type="date" name="dataAplicacao"
-            [(ngModel)]="novaAplicacao.dataAplicacao" required>
-        </mat-form-field>
-
-        <mat-form-field appearance="outline">
-          <mat-label>Próxima dose</mat-label>
-          <input matInput type="date" name="proximaDose"
-            [(ngModel)]="novaAplicacao.proximaDose">
-        </mat-form-field>
-
-        <div class="acoes">
-          <button mat-raised-button color="primary" type="submit">
-            Salvar
-          </button>
-
-          <button mat-button type="button"
-            (click)="cancelarFormulario()">
-            Cancelar
-          </button>
-        </div>
-
-      </form>
-    </mat-card-content>
-  </mat-card>
-
-  <h2>Histórico de aplicações</h2>
-
-  <div *ngIf="aplicacoes.length === 0" class="vazio">
-    Nenhuma aplicação cadastrada.
+    <button mat-raised-button color="primary"
+      (click)="mostrarFormulario = !mostrarFormulario">
+      + Nova aplicação
+    </button>
   </div>
 
-  <mat-card *ngFor="let item of aplicacoes" class="cartao">
-    <mat-card-content>
-      <h3>{{ item.vacina }}</h3>
-      <p><strong>Pet:</strong> {{ item.pet }}</p>
-      <p><strong>Aplicação:</strong> {{ item.dataAplicacao | date:'dd/MM/yyyy' }}</p>
-      <p>
-        <strong>Próxima dose:</strong>
-        {{ item.proximaDose ? (item.proximaDose | date:'dd/MM/yyyy') : 'Não informada' }}
-      </p>
+  <div class="resumo">
+    <mat-card class="resumo-card">
+      <span>Total de aplicações</span>
+      <strong>{{ aplicacoes.length }}</strong>
+    </mat-card>
+  </div>
 
-      <button mat-button color="primary"
-        (click)="editarAplicacao(item)">
-        Editar
-      </button>
+  <mat-card class="formulario" *ngIf="mostrarFormulario">
 
-      <button mat-button color="warn"
-        (click)="excluirAplicacao(item.id)">
-        Excluir
-      </button>
-    </mat-card-content>
+    <h2>{{ editandoId !== null ? 'Editar aplicação' : 'Registrar aplicação' }}</h2>
+
+    <form (ngSubmit)="salvarAplicacao()">
+
+      <mat-form-field appearance="outline">
+        <mat-label>Pet</mat-label>
+        <mat-select name="pet" [(ngModel)]="novaAplicacao.petId" required>
+          <mat-option *ngFor="let pet of pets" [value]="pet.id">
+            {{ pet.nome }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Vacina</mat-label>
+        <mat-select name="vacina" [(ngModel)]="novaAplicacao.vacinaId" required>
+          <mat-option *ngFor="let vacina of vacinas" [value]="vacina.id">
+            {{ vacina.nome }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Data da aplicação</mat-label>
+        <input matInput type="date" name="dataAplicacao"
+          [(ngModel)]="novaAplicacao.dataAplicacao" required>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Próxima dose</mat-label>
+        <input matInput type="date" name="proximaDose"
+          [(ngModel)]="novaAplicacao.proximaDose">
+      </mat-form-field>
+
+      <div class="botoes">
+        <button mat-raised-button color="primary" type="submit">
+          Salvar aplicação
+        </button>
+
+        <button mat-button type="button" (click)="cancelarFormulario()">
+          Cancelar
+        </button>
+      </div>
+
+    </form>
   </mat-card>
+
+  <mat-card class="lista-card">
+
+    <div class="lista-cabecalho">
+      <h2>Aplicações cadastradas</h2>
+    </div>
+
+    <div class="tabela">
+      <table>
+        <thead>
+          <tr>
+            <th>Pet</th>
+            <th>Vacina</th>
+            <th>Aplicação</th>
+            <th>Próxima dose</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let item of aplicacoes">
+            <td>{{ item.pet.nome }}</td>
+            <td>{{ item.vacina.nome }}</td>
+            <td>{{ item.dataAplicacao | date:'dd/MM/yyyy' }}</td>
+            <td>
+              {{ item.proximaDose ? (item.proximaDose | date:'dd/MM/yyyy') : 'Não informada' }}
+            </td>
+
+            <td class="acoes">
+              <button mat-button color="primary"
+                (click)="editarAplicacao(item)">
+                Editar
+              </button>
+
+              <button mat-button color="warn"
+                (click)="excluirAplicacao(item.id!)">
+                Excluir
+              </button>
+            </td>
+          </tr>
+
+          <tr *ngIf="aplicacoes.length === 0">
+            <td colspan="5" class="vazio">
+              Nenhuma aplicação cadastrada.
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </mat-card>
+
 </div>

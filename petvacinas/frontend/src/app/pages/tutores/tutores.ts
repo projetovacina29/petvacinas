@@ -2,6 +2,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { RouterLink } from '@angular/router';
 
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -16,6 +17,7 @@ import { TutorService, Tutor } from '../../services/tutor';
   imports: [
     CommonModule,
     FormsModule,
+    RouterLink,
     MatCardModule,
     MatFormFieldModule,
     MatInputModule,
@@ -34,6 +36,9 @@ export class Tutores implements OnInit {
     telefone: ''
   };
 
+  editando: boolean = false;
+  idEditando: number = 0;
+
   constructor(private tutorService: TutorService) {}
 
   ngOnInit(): void {
@@ -51,7 +56,7 @@ export class Tutores implements OnInit {
     this.tutorService.cadastrar(this.tutor).subscribe({
       next: () => {
         alert('Tutor cadastrado com sucesso!');
-        this.tutor = { nome: '', telefone: '' };
+        this.limparFormulario();
         this.listar();
       },
       error: (erro) => {
@@ -60,5 +65,49 @@ export class Tutores implements OnInit {
       }
     });
   }
+
+  editar(tutor: Tutor): void {
+    this.tutor = {
+      nome: tutor.nome,
+      telefone: tutor.telefone
+    };
+
+    this.idEditando = tutor.id!;
+    this.editando = true;
+  }
+
+  atualizar(): void {
+    this.tutorService.atualizar(this.idEditando, this.tutor).subscribe({
+      next: () => {
+        alert('Tutor atualizado com sucesso!');
+        this.limparFormulario();
+        this.listar();
+      },
+      error: (erro) => {
+        console.error(erro);
+        alert('Erro ao atualizar tutor.');
+      }
+    });
+  }
+
+  excluir(id: number): void {
+    if (confirm('Deseja realmente excluir este tutor?')) {
+      this.tutorService.excluir(id).subscribe({
+        next: () => {
+          alert('Tutor excluído com sucesso!');
+          this.listar();
+        },
+        error: (erro) => {
+          console.error(erro);
+          alert('Erro ao excluir tutor.');
+        }
+      });
+    }
+  }
+
+  limparFormulario(): void {
+    this.tutor = { nome: '', telefone: '' };
+    this.editando = false;
+    this.idEditando = 0;
+  }
 }
-import { RouterLink } from '@angular/router';

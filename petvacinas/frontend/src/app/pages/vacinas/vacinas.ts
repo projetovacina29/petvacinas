@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
@@ -6,16 +7,9 @@ import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { MatSelectModule } from '@angular/material/select';
 import { RouterLink } from '@angular/router';
 
-interface Vacina {
-  id: number;
-  pet: string;
-  nome: string;
-  aplicacao: string;
-  proximaDose: string;
-}
+import { VacinaService, Vacina } from '../../services/vacina';
 
 @Component({
   selector: 'app-vacinas',
@@ -27,13 +21,12 @@ interface Vacina {
     MatButtonModule,
     MatFormFieldModule,
     MatInputModule,
-    MatSelectModule,
     RouterLink
   ],
   templateUrl: './vacinas.html',
   styleUrl: './vacinas.scss'
 })
-export class Vacinas {
+export class Vacinas implements OnInit {
 
   vacinas: Vacina[] = [];
 
@@ -41,92 +34,98 @@ export class Vacinas {
   mostrarFormulario = false;
   editandoId: number | null = null;
 
-  novaVacina: Vacina = this.formularioVazio();
+  novaVacina: Vacina = {
+    nome: '',
+    descricao: ''
+  };
 
-  formularioVazio(): Vacina {
-    return {
-      id: 0,
-      pet: '',
-      nome: '',
-      aplicacao: '',
-      proximaDose: ''
-    };
+  constructor(private vacinaService: VacinaService) {}
+
+  ngOnInit(): void {
+    this.listar();
+  }
+
+  listar(): void {
+    this.vacinaService.listar().subscribe({
+      next: dados => this.vacinas = dados,
+      error: erro => console.error('Erro ao listar vacinas:', erro)
+    });
   }
 
   get vacinasFiltradas(): Vacina[] {
     const termo = this.pesquisa.toLowerCase();
 
     return this.vacinas.filter(v =>
-      v.pet.toLowerCase().includes(termo) ||
-      v.nome.toLowerCase().includes(termo)
+      v.nome.toLowerCase().includes(termo) ||
+      v.descricao.toLowerCase().includes(termo)
     );
   }
 
-  get totalEmDia(): number {
-  return this.vacinas.filter(v => this.statusVacina(v) === 'Em dia').length;
-}
-
-get totalAtrasadas(): number {
-  return this.vacinas.filter(v => this.statusVacina(v) === 'Atrasada').length;
-}
-
   salvarVacina(): void {
-    if (
-      !this.novaVacina.pet ||
-      !this.novaVacina.nome ||
-      !this.novaVacina.aplicacao
-    ) {
+    if (!this.novaVacina.nome || !this.novaVacina.descricao) {
       alert('Preencha os campos obrigatórios!');
       return;
     }
 
     if (this.editandoId !== null) {
-      const indice = this.vacinas.findIndex(
-        v => v.id === this.editandoId
-      );
-
-      if (indice !== -1) {
-        this.vacinas[indice] = { ...this.novaVacina };
-      }
+      this.vacinaService.atualizar(this.editandoId, this.novaVacina).subscribe({
+        next: () => {
+          alert('Vacina atualizada com sucesso!');
+          this.cancelarFormulario();
+          this.listar();
+        },
+        error: erro => {
+          console.error(erro);
+          alert('Erro ao atualizar vacina.');
+        }
+      });
     } else {
-      this.vacinas.push({
-        ...this.novaVacina,
-        id: Date.now()
+      this.vacinaService.cadastrar(this.novaVacina).subscribe({
+        next: () => {
+          alert('Vacina cadastrada com sucesso!');
+          this.cancelarFormulario();
+          this.listar();
+        },
+        error: erro => {
+          console.error(erro);
+          alert('Erro ao cadastrar vacina.');
+        }
       });
     }
-
-    this.cancelarFormulario();
   }
 
   editarVacina(vacina: Vacina): void {
-    this.novaVacina = { ...vacina };
-    this.editandoId = vacina.id;
+    this.novaVacina = {
+      nome: vacina.nome,
+      descricao: vacina.descricao
+    };
+
+    this.editandoId = vacina.id!;
     this.mostrarFormulario = true;
   }
 
   excluirVacina(id: number): void {
     if (confirm('Deseja realmente excluir esta vacina?')) {
-      this.vacinas = this.vacinas.filter(v => v.id !== id);
+      this.vacinaService.excluir(id).subscribe({
+        next: () => {
+          alert('Vacina excluída com sucesso!');
+          this.listar();
+        },
+        error: erro => {
+          console.error(erro);
+          alert('Erro ao excluir vacina.');
+        }
+      });
     }
   }
 
   cancelarFormulario(): void {
-    this.novaVacina = this.formularioVazio();
+    this.novaVacina = {
+      nome: '',
+      descricao: ''
+    };
+
     this.editandoId = null;
     this.mostrarFormulario = false;
-  }
-
-  statusVacina(vacina: Vacina): string {
-    if (!vacina.proximaDose) return 'Sem próxima dose';
-
-    const hoje = new Date();
-    hoje.setHours(0, 0, 0, 0);
-
-    const data = new Date(vacina.proximaDose + 'T00:00:00');
-
-    if (data < hoje) return 'Atrasada';
-    if (data.getTime() === hoje.getTime()) return 'Vence hoje';
-
-    return 'Em dia';
   }
 }

@@ -14,7 +14,7 @@ export interface Tutor {
 })
 export class TutorService {
 
-  private apiUrl = 'http://localhost:8080/tutores';
+  private apiUrl = 'https://verbose-space-train-xr4pr5gr46w6c67w9-8080.app.github.dev/tutores';
 
   constructor(private http: HttpClient) {}
 
