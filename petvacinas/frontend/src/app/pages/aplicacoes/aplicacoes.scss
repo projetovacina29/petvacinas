@@ -1,0 +1,34 @@
+
+.pagina {
+  padding: 30px;
+}
+
+h1 {
+  color: #1976d2;
+}
+
+.formulario {
+  margin-top: 20px;
+  padding: 20px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.acoes {
+  display: flex;
+  gap: 10px;
+}
+
+.cartao {
+  margin-top: 15px;
+  padding: 10px;
+}
+
+.vazio {
+  margin-top: 20px;
+  color: #666;
+}

@@ -1,20 +1,10 @@
-
 import { Component } from '@angular/core';
-import { RouterOutlet, RouterLink } from '@angular/router';
-
-import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatCardModule } from '@angular/material/card';
-import { MatButtonModule } from '@angular/material/button';
+import { RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-root',
-  imports: [
-    RouterOutlet,
-    RouterLink,
-    MatToolbarModule,
-    MatCardModule,
-    MatButtonModule
-  ],
+  standalone: true,
+  imports: [RouterOutlet],
   templateUrl: './app.html',
   styleUrl: './app.scss'
 })

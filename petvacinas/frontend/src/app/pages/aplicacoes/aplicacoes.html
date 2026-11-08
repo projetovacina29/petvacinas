@@ -1,0 +1,90 @@
+
+<div class="pagina">
+  <h1>Aplicações de Vacinas</h1>
+  <button mat-raised-button color="primary" routerLink="/">
+  ← Voltar ao início
+</button>
+  <p>Gerencie as vacinas aplicadas nos seus pets.</p>
+
+  <button mat-raised-button color="primary"
+    (click)="mostrarFormulario = !mostrarFormulario">
+    Nova aplicação
+  </button>
+
+  <mat-card *ngIf="mostrarFormulario" class="formulario">
+    <mat-card-header>
+      <mat-card-title>
+        {{ editandoId !== null ? 'Editar aplicação' : 'Cadastrar aplicação' }}
+      </mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content>
+      <form (ngSubmit)="salvarAplicacao()">
+
+        <mat-form-field appearance="outline">
+          <mat-label>Nome do pet</mat-label>
+          <input matInput name="pet"
+            [(ngModel)]="novaAplicacao.pet" required>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Nome da vacina</mat-label>
+          <input matInput name="vacina"
+            [(ngModel)]="novaAplicacao.vacina" required>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Data da aplicação</mat-label>
+          <input matInput type="date" name="dataAplicacao"
+            [(ngModel)]="novaAplicacao.dataAplicacao" required>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Próxima dose</mat-label>
+          <input matInput type="date" name="proximaDose"
+            [(ngModel)]="novaAplicacao.proximaDose">
+        </mat-form-field>
+
+        <div class="acoes">
+          <button mat-raised-button color="primary" type="submit">
+            Salvar
+          </button>
+
+          <button mat-button type="button"
+            (click)="cancelarFormulario()">
+            Cancelar
+          </button>
+        </div>
+
+      </form>
+    </mat-card-content>
+  </mat-card>
+
+  <h2>Histórico de aplicações</h2>
+
+  <div *ngIf="aplicacoes.length === 0" class="vazio">
+    Nenhuma aplicação cadastrada.
+  </div>
+
+  <mat-card *ngFor="let item of aplicacoes" class="cartao">
+    <mat-card-content>
+      <h3>{{ item.vacina }}</h3>
+      <p><strong>Pet:</strong> {{ item.pet }}</p>
+      <p><strong>Aplicação:</strong> {{ item.dataAplicacao | date:'dd/MM/yyyy' }}</p>
+      <p>
+        <strong>Próxima dose:</strong>
+        {{ item.proximaDose ? (item.proximaDose | date:'dd/MM/yyyy') : 'Não informada' }}
+      </p>
+
+      <button mat-button color="primary"
+        (click)="editarAplicacao(item)">
+        Editar
+      </button>
+
+      <button mat-button color="warn"
+        (click)="excluirAplicacao(item.id)">
+        Excluir
+      </button>
+    </mat-card-content>
+  </mat-card>
+</div>

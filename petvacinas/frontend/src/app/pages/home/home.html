@@ -1,0 +1,58 @@
+<div class="container">
+  <mat-toolbar color="primary">
+    <span>🐾 PetVacinas</span>
+    <span class="spacer"></span>
+    <span>Controle de Vacinas</span>
+  </mat-toolbar>
+
+  <div class="conteudo">
+    <h1>Bem-vindo ao PetVacinas!</h1>
+    <p>Gerencie os pets e mantenha as vacinas em dia.</p>
+
+    <div class="cards">
+
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>🐶 Pets</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <p>Cadastre e consulte os animais.</p>
+        </mat-card-content>
+        <mat-card-actions>
+          <button mat-raised-button color="primary" routerLink="/pets">
+            Ver pets
+          </button>
+        </mat-card-actions>
+      </mat-card>
+
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>💉 Vacinas</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <p>Consulte as vacinas disponíveis.</p>
+        </mat-card-content>
+        <mat-card-actions>
+          <button mat-raised-button color="primary" routerLink="/vacinas">
+            Ver vacinas
+          </button>
+        </mat-card-actions>
+      </mat-card>
+
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>📋 Aplicações</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <p>Consulte as aplicações e próximas doses.</p>
+        </mat-card-content>
+        <mat-card-actions>
+          <button mat-raised-button color="primary" routerLink="/aplicacoes">
+            Ver aplicações
+          </button>
+        </mat-card-actions>
+      </mat-card>
+
+    </div>
+  </div>
+</div>

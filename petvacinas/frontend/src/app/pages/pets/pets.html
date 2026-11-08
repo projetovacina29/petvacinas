@@ -1,0 +1,136 @@
+<div class="pagina">
+
+  <div class="cabecalho">
+    <div>
+      <h1>🐾 Cadastro de Pets</h1>
+      <button mat-raised-button color="primary" [routerLink]="['/']">
+  ← Voltar ao início
+</button>
+      <p>Cadastre e gerencie os animais.</p>
+    </div>
+
+    <button
+      mat-raised-button
+      color="primary"
+      (click)="mostrarFormulario = !mostrarFormulario"
+    >
+      + Novo pet
+    </button>
+  </div>
+
+  <div class="resumo">
+    <mat-card class="resumo-card">
+      <span>Total de pets cadastrados</span>
+      <strong>{{ pets.length }}</strong>
+    </mat-card>
+  </div>
+
+  <mat-card class="formulario" *ngIf="mostrarFormulario">
+
+    <h2>{{ editandoId !== null ? 'Editar pet' : 'Cadastrar novo pet' }}</h2>
+
+    <form (ngSubmit)="salvarPet()">
+
+      <mat-form-field appearance="outline">
+        <mat-label>Nome do pet</mat-label>
+        <input matInput name="nome" [(ngModel)]="novoPet.nome" required />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Espécie</mat-label>
+        <mat-select name="especie" [(ngModel)]="novoPet.especie" required>
+          <mat-option value="Cachorro">Cachorro</mat-option>
+          <mat-option value="Gato">Gato</mat-option>
+          <mat-option value="Outro">Outro</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Raça</mat-label>
+        <input matInput name="raca" [(ngModel)]="novoPet.raca" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Idade (anos)</mat-label>
+        <input
+          matInput
+          type="number"
+          min="0"
+          name="idade"
+          [(ngModel)]="novoPet.idade"
+        />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Nome do tutor</mat-label>
+        <input matInput name="tutor" [(ngModel)]="novoPet.tutor" required />
+      </mat-form-field>
+
+      <div class="botoes">
+        <button mat-raised-button color="primary" type="submit">
+          Salvar pet
+        </button>
+
+        <button mat-button type="button" (click)="cancelarFormulario()">
+          Cancelar
+        </button>
+      </div>
+
+    </form>
+  </mat-card>
+
+  <mat-card class="lista-card">
+
+    <div class="lista-cabecalho">
+      <h2>Pets cadastrados</h2>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Pesquisar pet ou tutor</mat-label>
+        <input matInput name="pesquisa" [(ngModel)]="pesquisa" />
+      </mat-form-field>
+    </div>
+
+    <div class="tabela">
+      <table>
+        <thead>
+          <tr>
+            <th>Nome</th>
+            <th>Espécie</th>
+            <th>Raça</th>
+            <th>Idade</th>
+            <th>Tutor</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let pet of petsFiltrados">
+            <td>{{ pet.nome }}</td>
+            <td>{{ pet.especie }}</td>
+            <td>{{ pet.raca || 'Não informada' }}</td>
+            <td>{{ pet.idade }} anos</td>
+            <td>{{ pet.tutor }}</td>
+
+            <td class="acoes">
+              <button mat-button color="primary" (click)="editarPet(pet)">
+                Editar
+              </button>
+
+              <button mat-button color="warn" (click)="excluirPet(pet.id)">
+                Excluir
+              </button>
+            </td>
+          </tr>
+
+          <tr *ngIf="petsFiltrados.length === 0">
+            <td colspan="6" class="vazio">
+              Nenhum pet cadastrado.
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </mat-card>
+
+</div>
