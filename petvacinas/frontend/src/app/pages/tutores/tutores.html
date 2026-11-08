@@ -1,0 +1,67 @@
+
+<div class="pagina">
+  <h1>Cadastro de Tutores</h1>
+  <p>Gerencie os responsáveis pelos pets.</p>
+
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Novo Tutor</mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content>
+      <form (ngSubmit)="cadastrar()">
+
+        <mat-form-field appearance="outline">
+          <mat-label>Nome completo</mat-label>
+          <input matInput
+            name="nome"
+            [(ngModel)]="tutor.nome"
+            required>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Telefone</mat-label>
+          <input matInput
+            name="telefone"
+            [(ngModel)]="tutor.telefone"
+            required>
+        </mat-form-field>
+
+        <button mat-raised-button color="primary" type="submit">
+          Cadastrar tutor
+        </button>
+
+      </form>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card class="lista">
+    <mat-card-header>
+      <mat-card-title>Tutores cadastrados</mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content>
+      <table mat-table [dataSource]="tutores">
+
+        <ng-container matColumnDef="id">
+          <th mat-header-cell *matHeaderCellDef>ID</th>
+          <td mat-cell *matCellDef="let tutor">{{ tutor.id }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="nome">
+          <th mat-header-cell *matHeaderCellDef>Nome</th>
+          <td mat-cell *matCellDef="let tutor">{{ tutor.nome }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="telefone">
+          <th mat-header-cell *matHeaderCellDef>Telefone</th>
+          <td mat-cell *matCellDef="let tutor">{{ tutor.telefone }}</td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="['id', 'nome', 'telefone']"></tr>
+        <tr mat-row *matRowDef="let row; columns: ['id', 'nome', 'telefone']"></tr>
+
+      </table>
+    </mat-card-content>
+  </mat-card>
+</div>
