@@ -22,7 +22,7 @@ public class AplicacaoVacinaController {
         return repository.findAll();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/{id:\\d+}")
     public AplicacaoVacina buscarPorId(@PathVariable Integer id) {
         return repository.findById(id).orElse(null);
     }
@@ -41,5 +41,15 @@ public class AplicacaoVacinaController {
     @DeleteMapping("/{id}")
     public void excluir(@PathVariable Integer id) {
         repository.deleteById(id);
+    }
+
+       @GetMapping("/com-detalhes")
+    public List<AplicacaoVacina> listarComDetalhes() {
+        return repository.listarComPetEVacina();
+    }
+
+    @GetMapping("/contar")
+    public long contarAplicacoes() {
+        return repository.contarAplicacoes();
     }
 }
